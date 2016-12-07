@@ -75,35 +75,35 @@ export default {
       margin-top: 4px;
     }
     .filmsBar .icoBox{
-      background: url("../assets/images/a3v.png") no-repeat;
+      background: url("../common/images/a3v.png") no-repeat;
       background-size: 100% 100%;
     }
     .filmsBar.active .icoBox{
-      background: url("../assets/images/a3w.png") no-repeat;
+      background: url("../common/images/a3w.png") no-repeat;
       background-size: 100% 100%;
     }
     .cinimaBar .icoBox{
-      background: url("../assets/images/a3n.png") no-repeat;
+      background: url("../common/images/a3n.png") no-repeat;
       background-size: 100% 100%;
     }
     .cinimaBar.active .icoBox{
-      background: url("../assets/images/a3o.png") no-repeat;
+      background: url("../common/images/a3o.png") no-repeat;
       background-size: 100% 100%;
     }
     .discoverBar .icoBox{
-      background: url("../assets/images/a3p.png") no-repeat;
+      background: url("../common/images/a3p.png") no-repeat;
       background-size: 100% 100%;
     }
     .discoverBar.active .icoBox{
-      background: url("../assets/images/a3q.png") no-repeat;
+      background: url("../common/images/a3q.png") no-repeat;
       background-size: 100% 100%;
     }
     .userBar .icoBox{
-      background: url("../assets/images/a3t.png") no-repeat;
+      background: url("../common/images/a3t.png") no-repeat;
       background-size: 100% 100%;
     }
     .userBar.active .icoBox{
-      background: url("../assets/images/a3u.png") no-repeat;
+      background: url("../common/images/a3u.png") no-repeat;
       background-size: 100% 100%;
     }
 </style>

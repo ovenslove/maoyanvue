@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <div class="mainContainer">
-      <component :is="currentView">
-      </component>
+    <div class="Container">
+      <component :is="currentView"></component>
     </div>
-    <footers v-on:exchangeActiveIndex="exchangeView"></footers>
+    <footer>
+      <footers v-on:exchangeActiveIndex="exchangeView"></footers>
+    </footer>
   </div>
 </template>
 
 <script>
-import footers from './components/footers'
-import films from './components/films'
-import cinima from './components/cinima'
-import discover from './components/discover'
-import user from './components/user'
+import films from './components/films/films'
+import cinema from './components/cinema/cinema'
+import discover from './components/discover/discover'
+import user from './components/user/user'
+import footers from './components/footers/footers'
 
 export default {
   name: 'app',
@@ -25,7 +26,7 @@ export default {
   components: {
     footers,
     films,
-    cinima,
+    cinema,
     discover,
     user
   },
@@ -33,7 +34,7 @@ export default {
     exchangeView (msg) {
       switch (msg) {
         case 0 :this.currentView = 'films'; break
-        case 1 :this.currentView = 'cinima'; break
+        case 1 :this.currentView = 'cinema'; break
         case 2 :this.currentView = 'discover'; break
         case 3 :this.currentView = 'user'; break
       }
@@ -42,22 +43,24 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" rel="stylesheet/scss">
 #app {
   font-family: '黑体';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   background:#fff;
   width:100%;
   height:100%;
   position: relative;
   overflow: hidden;
+    .Container{
+      width: 100%;
+      height: calc(100% - 12.5vw);
+    }
+    footer{
+      width: 100%;
+      height: 12.5vw;
+      position:relative;
+    }
 }
-.mainContainer{
-  width: 100%;
-  height: calc(100% - 12.5vw);
-  background: #fff;
-}
+
 </style>
