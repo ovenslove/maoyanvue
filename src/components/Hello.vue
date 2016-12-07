@@ -21,6 +21,7 @@ export default {
 <style scoped>
 h1, h2 {
   font-weight: normal;
+  margin: 0;
 }
 
 ul {
@@ -30,7 +31,7 @@ ul {
 
 li {
   display: inline-block;
-  margin: 0 10px;
+  /*margin: 0 10px;*/
 }
 
 a {
