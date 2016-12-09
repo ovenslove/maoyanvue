@@ -14,7 +14,7 @@ Vue.use(VueRouter)
 const routes = [
   { path: '/', component: Index },
   { path: '/index', component: Index },
-  { path: '/filminfo', component: FilmInfo }
+  { path: '/filminfo/:id', component: FilmInfo }
 ]
 const router = new VueRouter({
   routes

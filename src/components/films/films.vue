@@ -31,11 +31,13 @@
                  </div>
                  <div class="movieContentContainer">
                       <div class="movieInfoContainer">
-                        <div class="movieTtileContainer">{{movie.nm}}</div>
-                        <div class="movieScoreContainer">
-                          评分 <span>{{movie.sc}}</span></div>
-                        <div class="movieWordsContainer">{{movie.scm}}</div>
-                        <div class="movieCinemaContainer">{{movie.showInfo}}</div>
+                        <router-link :to="'/filminfo/'+movie.id">
+                          <div class="movieTtileContainer">{{movie.nm}}</div>
+                          <div class="movieScoreContainer">
+                            评分 <span>{{movie.sc}}</span></div>
+                          <div class="movieWordsContainer">{{movie.scm}}</div>
+                          <div class="movieCinemaContainer">{{movie.showInfo}}</div>
+                        </router-link>
                       </div>
                       <div class="movieBookBtn">
                           购票
@@ -112,6 +114,10 @@ export default {
 
 <style scoped lang="scss">
   @import '/static/Swiper-3.4.0/css/swiper.min.css';
+  a{
+    text-decoration: none;
+    color: inherit;
+  }
   .mainContainer{
     width: 100%;
     height: 100%;
