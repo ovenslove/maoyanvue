@@ -1,10 +1,5 @@
 <template>
   <div class="mainContainer">
-    <!-- 电影推荐 -->
-     <!-- <router-link to="/filminfo">前往详情页</router-link> -->
-     <!-- <div class="getInfo" v-on:click="getJson()">
-        获取数据
-     </div> -->
      <div class="indexNavBarContainer">
           <div class="locationContainer">
               <span>广州</span><i class="fa fa-angle-down"></i>
@@ -15,33 +10,78 @@
               <div class="simSwiperNavItem" :class="{active: swiperActiveIndex==2 }">找片</div>
           </div>
      </div>
-     <div class="swiper-container">
+     <div class="swiper-container mainSwiper">
          <div class="swiper-wrapper">
            <div class="swiper-slide">
              <div class="searchContainer">
                   <input type="text" name="search" value="" placeholder="找影视剧、影人、影院" class="searchInput">
              </div>
              <div class="bannerContainer">
-                <img :src="bannerImagesUrl" alt=""  class="bannerImages"/>
+                <!-- <img :src="bannerImagesUrl" alt=""  class="bannerImages"/> -->
+                <div class="swiper-container bannerSwiper">
+                    <div class="swiper-wrapper">
+                      <div class="swiper-slide" v-for="banner in bannerData">
+                        <img class="bannerImages" :src="banner.imgUrl" alt="">
+                      </div>
+                    </div>
+                </div>
              </div>
              <ul class="movieListGroup">
                <li class="movieListItem" v-for="movie in moviesData" >
                  <div class="moviePreviewImagesContainer">
-                      <img :src="movie.img" alt="" />
+                      <img :src="movie.img.replace(/(\/w.h\/)/igm, '/165.220/')" alt="" />
                  </div>
                  <div class="movieContentContainer">
                       <div class="movieInfoContainer">
                         <router-link :to="'/filminfo/'+movie.id">
-                          <div class="movieTtileContainer">{{movie.nm}}</div>
+                          <div class="movieTtileContainer">
+                            {{movie.nm}}
+                            <span v-if="movie.ver === '3DIMAX'">
+                                <span class="markContainer">
+                                  <span class="mark-1">3D</span>
+                                  <span class="mark-2">IMAX</span>
+                                </span>
+                            </span>
+                            <span v-if="movie.ver === '2DIMAX'">
+                                <span class="markContainer">
+                                  <span class="mark-1">2D</span>
+                                  <span class="mark-2">IMAX</span>
+                                </span>
+                            </span>
+                            <span v-if="movie.ver === '2D3D'">
+                                <span class="markContainer">
+                                  <span class="mark-1">2D</span>
+                                  <span class="mark-2">3D</span>
+                                </span>
+                            </span>
+                            <span v-if="movie.ver === '3D'">
+                              <span class="markContainer">
+                                <span class="mark-1">3D</span>
+                              </span>
+                            </span>
+                          </div>
                           <div class="movieScoreContainer">
-                            评分 <span>{{movie.sc}}</span></div>
+                            <div  v-if="movie.sc > 0">
+                              观众 <span class="num">{{movie.sc}}</span>
+                                <span v-if="movie.proScore > 0">
+                                 | 专业 <span class="num">{{movie.proScore}}</span>
+                                </span>
+                            </div>
+                            <div v-else>
+                              <span class="num">{{movie.wish}}</span>人想看
+                            </div>
+                          </div>
                           <div class="movieWordsContainer">{{movie.scm}}</div>
                           <div class="movieCinemaContainer">{{movie.showInfo}}</div>
                         </router-link>
                       </div>
-                      <div class="movieBookBtn">
-                          购票
+                      <div class="movieBookBtn bookNow" v-if="movie.sc > 0">
+                            购票
                       </div>
+                      <div class="movieBookBtn bookNext" v-else>
+                            预售
+                      </div>
+
                  </div>
                </li>
              </ul>
@@ -69,7 +109,7 @@ export default {
   data () {
     return {
       swiperActiveIndex: 0,
-      bannerImagesUrl: 'static/images/banner.jpg',
+      bannerData: [],
       moviesData: []
     }
   },
@@ -80,34 +120,74 @@ export default {
     var that = this
     this.$http({
             method: 'GET',
-            url: '/api/movie/list.json?limit=20',
+            url: '/ad/api/v3/adverts?cityid=20&category=11&version=7.6.0&new=0&app=movie&clienttp=android&uuid=963D1938E5007A1BCEC5A2D5BE928E3B3C42DFA3E7DA23A79000D1696D2C43B1&devid=867993025035633&uid=43325925&movieid=&partner=1&apptype=1&smId=&utm_campaign=AmovieBmovieCD100&movieBundleVersion=7601&utm_source=xiaomi&utm_medium=android&utm_term=7.6.0&utm_content=867993025035633&ci=20&net=255&dModel=MI%20NOTE%20LTE&lat=23.162082&lng=113.32446',
             headers: {
               'X-Requested-With': 'XMLHttpRequest'
             },
             emulateJSON: true
         }).then((response) => {
-            console.log(JSON.parse(response.body).data.movies)
-            that.moviesData = JSON.parse(response.body).data.movies
+            // console.log(response.body.data)
+            that.bannerData = response.body.data
         }, (response) => {
-          // error callback
+          console.log('error')
+        })
+    this.$http({
+            method: 'GET',
+            url: '/api/mmdb/movie/v3/list/hot.json?ci=20&limit=12',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            emulateJSON: true
+        }).then((response) => {
+            console.log(response.body.data.hot)
+            for (let item in response.body.data.hot) {
+              let val = response.body.data.hot[item].ver
+              console.log('原字符--------------------------' + val)
+              // console.log('匹配结果------------------------' + val.match(/3D\/IMAX/igm))
+              if (val.match(/3d\/imax/igm) != null) {
+                response.body.data.hot[item].ver = '3DIMAX'
+              } else if (val.match(/2D\/IMAX/igm) != null) {
+                response.body.data.hot[item].ver = '2DIMAX'
+              } else if (val.match(/2D\/3D/igm) != null) {
+                response.body.data.hot[item].ver = '2D3D'
+              } else if (val.match(/3D/igm) != null) {
+                response.body.data.hot[item].ver = '3D'
+              } else if (val.match(/2D/igm) != null) {
+                response.body.data.hot[item].ver = '2D'
+              }
+              console.log('修改过的----------------------------' + val)
+              // console.log(response.body.data.hot[item].ver)
+            }
+
+            that.moviesData = response.body.data.hot
+        }, (response) => {
           console.log('error')
         })
   },
   mounted () {
      console.log('挂载好了')
      var that = this
-     var mySwiper = new Swiper('.swiper-container', {
+     var mainSwiper = new Swiper('.mainSwiper', {
        direction: 'horizontal',
        onSlideChangeStart () {
-         console.log(mySwiper.activeIndex)
-         that.swiperActiveIndex = mySwiper.activeIndex
+         console.log(mainSwiper.activeIndex)
+         that.swiperActiveIndex = mainSwiper.activeIndex
+       }
+     })
+     /* eslint-disable no-new */
+    new Swiper('.bannerSwiper', {
+       direction: 'horizontal',
+       paginationClickable: true,
+       autoplay: 5000,
+       centeredSlides: true,
+       observer: true,
+       observeParents: true,
+       autoplayDisableOnInteraction: false,
+       onSlideChangeStart () {
        }
      })
    },
   methods: {
-    getJson () {
-      console.log('getJson')
-    }
   }
 }
 </script>
@@ -230,11 +310,44 @@ export default {
                     height: 6vw;
                     line-height: 6vw;
                     color: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                      .markContainer{
+                        font-size: 10px;
+                        display: flex;
+                        margin-left: 5px;
+                        align-items: center;
+                          span{
+                            padding: 0px 3px;
+                            display: inline-block;
+                            height: 14px;
+                            line-height: 14px;
+                            box-sizing: border-box;
+                            align-items: center;
+                          }
+                          span.mark-1{
+                            background: #8AB9CD;
+                            color: #fff;
+                            border: 1px solid #8AB9CD;
+                            border-top-left-radius: 3px;
+                            border-bottom-left-radius: 3px;
+                          }
+                          span.mark-2{
+                            background: #fff;
+                            color: #8AB9CD;
+                            border-top: 1px solid #8AB9CD;
+                            border-right: 1px solid #8AB9CD;
+                            border-bottom: 1px solid #8AB9CD;
+                            border-top-right-radius: 3px;
+                            border-bottom-right-radius: 3px;
+                          }
+                      }
                   }
                   .movieScoreContainer{
                     height: 6vw;
                     line-height: 6vw;
-                      span{
+                      span.num{
                         color: #F2B42B;
                         font-size: 14px;
                       }
@@ -249,12 +362,18 @@ export default {
                   }
               }
               .movieBookBtn{
-                border: 1px solid #D23E34;
                 margin: auto;
                 padding: 1vw 2vw;
                 border-radius: 4px;
                 font-size: 14px;
-                color: #D23E34;
+                  &.bookNow{
+                    color: #D23E34;
+                    border: 1px solid #D23E34;
+                  }
+                  &.bookNext{
+                    color: #159df1;
+                    border: 1px solid #159df1;
+                  }
               }
           }
       }
@@ -292,10 +411,14 @@ export default {
   .bannerContainer{
     width: 100%;
     height: 24vw;
-      .bannerImages{
-        display: block;
+      .bannerSwiper{
         width: 100%;
         height: 100%;
+          .bannerImages{
+            display: block;
+            width: 100%;
+            height: 100%;
+          }
       }
   }
 </style>

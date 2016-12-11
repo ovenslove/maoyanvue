@@ -7,9 +7,11 @@ import VueResource from 'vue-resource'
 import App from './App'
 import Index from 'components/index/index'
 import FilmInfo from 'components/filminfo/filminfo'
+import scroll from 'vue-scroll'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
+Vue.use(scroll)
 
 const routes = [
   { path: '/', component: Index },

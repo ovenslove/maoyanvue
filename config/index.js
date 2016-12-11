@@ -23,10 +23,17 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://m.maoyan.com',
+        target: 'http://api.maoyan.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
+        }
+      },
+      '/ad': {
+        target: 'http://advert.mobile.meituan.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ad': ''
         }
       }
     },
