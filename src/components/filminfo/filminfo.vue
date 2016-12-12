@@ -94,7 +94,7 @@
               <ul class="actorListGroup" v-scroll="onScroll1">
                 <li class="actorListItem" v-for="item in filmData.actorData.director">
                   <div class="actorImageShowContainer">
-                      <img :src="item.avatar.replace(/(\/w.h\/)/igm, '/165.220/')" alt="">
+                      <img :src="item.avatar.replace(/(\/w.h\/)/igm, '/')" alt="" onerror="this.src='static/images/onerror-actor.png'">
                   </div>
                   <div class="actorNameContainer">
                       {{ item.cnm }}
@@ -105,7 +105,7 @@
                 </li>
                 <li class="actorListItem" v-for="item in filmData.actorData.actor">
                   <div class="actorImageShowContainer">
-                      <img :src="item.avatar.replace(/(\/w.h\/)/igm, '/165.220/')" alt="">
+                      <img :src="item.avatar.replace(/(\/w.h\/)/igm, '/')" alt="" onerror="this.src='static/images/onerror-actor.png'">
                   </div>
                   <div class="actorNameContainer">
                       {{ item.cnm }}
@@ -153,7 +153,7 @@
           <div class="panleBodyContaner filmMediaContentContainer">
               <ul class="mediaListGroup" v-scroll="onScroll2">
                 <li class="mediaListItem">
-                  <div class="mediaImageShowContainer">
+                  <div class="mediaImageShowContainer movie">
                       <img :src="filmData.baseData.videoImg" alt="">
                   </div>
                 </li>
@@ -171,7 +171,7 @@
               <div class="musicMainContainer">
                 <div class="musicImageContainer">
                   <div class="">
-                    <img :src="filmData.baseData.img" alt="">
+                    <img :src="filmData.baseData.img" alt="" onerror="this.src='static/images/onerror.png'">
                   </div>
                 </div>
                 <div class="musicContentContainer">
@@ -773,10 +773,22 @@
             .mediaImageShowContainer{
               width: 100%;
               height: px2vw(200);
+              position: relative;
               img{
                 display: block;
                 height: 100%;
                 width: 100%;
+              }
+              &.movie::after{
+                content: '';
+                display: block;
+                position: absolute;
+                height: 6vw;
+                width: 6vw;
+                right: 10%;
+                bottom: 10%;
+                background: url('../common/images/a5a.png') no-repeat;
+                background-size: 100% 100%;
               }
             }
           }
