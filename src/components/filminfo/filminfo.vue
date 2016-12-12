@@ -159,7 +159,7 @@
                 </li>
                 <li class="mediaListItem" v-for="item in filmData.baseData.photos">
                   <div class="mediaImageShowContainer">
-                      <img :src="item.replace(/(\/w.h\/)/igm, '/165.220/')" alt="">
+                      <img :src="item.replace(/(\/w.h\/)/igm, '/').split('@')[0]" alt="" onerror="this.src='static/images/onerror.png'">
                   </div>
                 </li>
               </ul>
