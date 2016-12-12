@@ -218,7 +218,7 @@
                     {{item.title}}
                     <br/>
                     <span class="simWinItem" v-for="win in item.items">
-                      {{win.title}}
+                      <span>{{win.title}}</span><br/>
                     </span>
                   </span>
                 </span>
