@@ -225,9 +225,76 @@
             </div>
         </div>
       </div>
-      <div class="filmSimPanle">
-          aaaa
+      <div class="filmSimPanle datumPanle">
+        <div class="panleHeaderContainer ">
+          <span>影片资料</span>
+          <span class="addDatum">添加资料</span>
+        </div>
+        <div class="panleBodyContaner ">
+          <div class="simDatumBox" v-for="item in filmData.datumData">
+            <img :src="item.img" alt="" class="simDatumIco">
+            <div class="simDatumContent">
+              <div class="title">
+                {{ item.title}}
+              </div>
+              <div class="content">
+                {{item.content}}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <!-- 专业评论 -->
+      <div class="filmSimPanle professionalReviewPanle" v-if="filmData.professionalReviewData.data">
+        <div class="panleHeaderContainer ">
+          <span>专业评论</span>
+        </div>
+        <div class="panleBodyContaner">
+          <div class="simReviewContainer" v-for="item in filmData.professionalReviewData.data">
+            <div class="userImageContainer">
+              <img :src="item.avatarurl" alt="">
+            </div>
+            <div class="reviewContentContainer">
+              <div class="userInfoContainer">
+                <div class="userInfo">
+                  <div class="userName">
+                    {{item.nick}}
+                  </div>
+                  <div class="userOccupation">
+                    {{item.authInfo}}
+                  </div>
+                </div>
+                <div class="Score">
+                    <span class="num">{{item.score * 2}}</span>分
+                </div>
+              </div>
+              <div class="reviewContent">
+                {{item.content}}
+              </div>
+              <div class="reviewBaseInfoContainer">
+                <span class="time">{{((new Date().getTime() - new Date(item.time)) / 84000) > 3 ? (new Date(item.time).getMonth()+1) + '-' + (new Date(item.time).getDate()+1) : Math.floor(((new Date().getTime() - new Date(item.time)) / 84000)) + '天前'}}</span>
+                <span class="approve">
+                  <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                  {{item.approve}}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="moreProfessionalReview" v-if="filmData.professionalReviewData.paging">
+            <span>查看全部{{filmData.professionalReviewData.paging.total}}条专业评论></span>
+        </div>
+      </div>
+      <!-- 短评评论 -->
+      <!-- <div class="filmSimPanle ">
+        <div class="panleHeaderContainer ">
+          <span>专业评论</span>
+        </div>
+        <div class="panleBodyContaner">
+            11111
+        </div>
+      </div> -->
+
     </div>
     <div class="goToBuyBtn">
       立即购买
@@ -250,7 +317,7 @@
         height: 100%;
         box-sizing: border-box;
         -webkit-overflow-scrolling : touch;
-        padding-bottom: 20vw;
+        padding-bottom: 12vw;
       }
       .goToBuyBtn{
         position: fixed;
@@ -624,7 +691,7 @@
               text-overflow:ellipsis;
               overflow:hidden;
               white-space:nowrap;
-              color: #ccc;
+              color: #999;
             }
           }
       }
@@ -877,7 +944,7 @@
                 font-size: 14px;
             }
             .musicName{
-                color: #ccc;
+                color: #999;
                 font-size: 13px;
             }
           }
@@ -927,7 +994,7 @@
                   line-height: 1.5;
                 }
                 span.intr{
-                  color: #CACACA;
+                  color: #999;
                   font-size: 13px;
                   line-height: 1.5;
 
@@ -963,6 +1030,172 @@
         }
     }
   }
+  // 影片资料
+  .datumPanle{
+    padding: 0;
+    .panleHeaderContainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 2vw;
+      font-size: 13px;
+      border-bottom: 1px solid #ddd;
+        span.addDatum{
+          border:1px solid #F34D41;
+          padding: 3px 5px;
+          border-radius:10px;
+          font-size: 12px;
+        }
+    }
+    .panleBodyContaner{
+      min-height: 30vw;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+        .simDatumBox{
+          width: 50%;
+          height: px2vw(170);
+          box-sizing: border-box;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          &:nth-child(2n + 1){
+            border-right: 1px solid #ddd;
+          }
+          &:nth-child(n){
+            border-bottom: 1px solid #ddd;
+          }
+          .simDatumIco{
+            width: px2vw(70);
+            height: px2vw(70);
+            display: block;
+          }
+          .simDatumContent{
+            width: 70%;
+            .title{
+                line-height: 1.5;
+                font-size: 16px;
+            }
+            .content{
+              text-overflow:ellipsis;
+              overflow:hidden;
+              white-space:nowrap;
+              font-size: 12px;
+              line-height: 1.5;
+              color: #999;
+            }
+          }
+        }
+    }
+  }
+  // 专业评论
+  .professionalReviewPanle{
+    padding: 0;
+      .panleHeaderContainer{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 0 2vw;
+        border-bottom: 1px solid #ddd;
+      }
+      .panleBodyContaner{
+        width: 100%;
+        min-height: 30vw;
+        .simReviewContainer{
+          width: 100%;
+          height: auto;
+          display: flex;
+          justify-content: space-around;
+          box-sizing: border-box;
+          padding:1vw 2vw;
+          &:not(:last-child) .reviewContentContainer{
+            border-bottom: 1px solid #ddd;
+          }
+          .userImageContainer{
+            width: px2vw(110);
+            height: px2vw(110);
+            border-radius: 50%;
+            overflow: hidden;
+            img{
+              display: block;
+              height: 100%;
+              width: 100%;
+            }
+          }
+          .reviewContentContainer{
+            width: 84%;
+            height: auto;
+
+            .userInfoContainer{
+              width: 100%;
+              height: px2vw(150);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              box-sizing: border-box;
+              padding: 0 2vw;
+              .userInfo{
+                width: 80%;
+                .userName{
+                  line-height: 1.5;
+                  font-size: 15px;
+                }
+                .userOccupation{
+                  font-size: 13px;
+                  line-height: 1.5;
+                  color: #999;
+                  text-overflow:ellipsis;
+                  overflow:hidden;
+                  white-space:nowrap;
+                }
+              }
+              .Score{
+                font-size: 12px;
+                color: #FFAE00;
+                .num{
+                  font-size: 20px;
+                }
+              }
+            }
+            .reviewContent{
+              box-sizing: border-box;
+              padding: 0 2vw;
+              font-size: 14px;
+              line-height: 1.3;
+            }
+            .reviewBaseInfoContainer{
+              width: 100%;
+              height: px2vw(110);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              box-sizing: border-box;
+              padding: 0 2vw;
+              color: #999;
+              font-size: 13px;
+              .time{}
+              .approve{}
+            }
+          }
+        }
+      }
+      .moreProfessionalReview{
+        height: px2vw(130);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top: 1px solid #ddd;
+        span{
+          font-size: 14px;
+          color: #F34D41;
+        }
+      }
+  }
 </style>
 
 <script>
@@ -989,7 +1222,7 @@ var getFilmInfo = (id, that) => {
     boxOfficeData: '/mmdb/movie/' + id + '/feature/v1/mbox.json',
     winningData: '/mmdb/movie/' + id + '/feature/awards.json',
     datumData: '/mmdb/movie/' + id + '/feature/v2/list.json',
-    professionalReviewData: '/mmdb/comments/pro/movie/' + id + '.json',
+    professionalReviewData: '/mmdb/comments/pro/movie/' + id + '.json?limit=3',
     shortReviewData: '/mmdb/comments/movie/v2/' + id + '.json',
     longReviewData: '/sns/movie/' + id + '/filmReview/top.json',
     relatedInformationData: '/sns/news/v3/type/0/target/' + id + '/top.json',
@@ -997,19 +1230,19 @@ var getFilmInfo = (id, that) => {
     relatedFilms: '/mmdb/movie/' + id + '/feature/relatedFilm.json'
   }
   // 基本信息baseData
-  that.$http({
-          method: 'GET',
-          url: '/api' + apiUrl.baseData,
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-      }).then((response) => {
-        // console.log(response.body.data.movie)
-        filmDatas.baseData = response.body.data.movie
-        filmDatas.baseData.img = filmDatas.baseData.img.replace(/(\/w.h\/)/igm, '/375.220/')
-      }, (response) => {
-        console.log('error')
-      })
+    that.$http({
+            method: 'GET',
+            url: '/api' + apiUrl.baseData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then((response) => {
+          // console.log(response.body.data.movie)
+          filmDatas.baseData = response.body.data.movie
+          filmDatas.baseData.img = filmDatas.baseData.img.replace(/(\/w.h\/)/igm, '/375.220/')
+        }, (response) => {
+          console.log('error')
+        })
     // 演员信息actorData
     that.$http({
             method: 'GET',
@@ -1086,7 +1319,7 @@ var getFilmInfo = (id, that) => {
               'X-Requested-With': 'XMLHttpRequest'
             }
         }).then((response) => {
-          // console.log(response.body)
+          console.log(response.body)
           filmDatas.professionalReviewData = response.body
         }, (response) => {
           console.log('error')
@@ -1156,14 +1389,12 @@ var getFilmInfo = (id, that) => {
         }, (response) => {
           console.log('error')
         })
-    console.log(filmDatas.datumData)
+    // console.log(filmDatas.datumData)
     return filmDatas
 }
 
 window.onscroll = () => {
   let top = document.documentElement.scrollTop || document.body.scrollTop
-  let left = document.documentElement.scrollLeft || document.body.scrollLeft
-  console.log(left)
   if (top < 200) {
     let opacity = top / 200
     document.querySelector('.filmInfoTopCtrlContainer').style.background = 'rgba(243,77,65,' + opacity + ')'
@@ -1219,7 +1450,7 @@ export default {
     onScroll2 (e, position) {
       this.position = position
       if (position.scrollLeft < 300) {
-        console.log(position.scrollLeft)
+        // console.log(position.scrollLeft)
         this.directorColumnLeft2 = -position.scrollLeft + 'px'
       } else {
         this.directorColumnLeft2 = '-300px'
@@ -1229,7 +1460,7 @@ export default {
   created () {
     console.log('created')
     let id = this.$route.params.id
-    console.log('id:' + id)
+    // console.log('id:' + id)
     this.filmData = getFilmInfo(id, this)
     // console.log(this.filmData.authorWordData)
   }

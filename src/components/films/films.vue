@@ -139,10 +139,10 @@ export default {
             },
             emulateJSON: true
         }).then((response) => {
-            console.log(response.body.data.hot)
+            // console.log(response.body.data.hot)
             for (let item in response.body.data.hot) {
               let val = response.body.data.hot[item].ver
-              console.log('原字符--------------------------' + val)
+              // console.log('原字符--------------------------' + val)
               // console.log('匹配结果------------------------' + val.match(/3D\/IMAX/igm))
               if (val.match(/3d\/imax/igm) != null) {
                 response.body.data.hot[item].ver = '3DIMAX'
@@ -155,7 +155,7 @@ export default {
               } else if (val.match(/2D/igm) != null) {
                 response.body.data.hot[item].ver = '2D'
               }
-              console.log('修改过的----------------------------' + val)
+              // console.log('修改过的----------------------------' + val)
               // console.log(response.body.data.hot[item].ver)
             }
 
