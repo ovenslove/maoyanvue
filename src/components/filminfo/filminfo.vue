@@ -80,9 +80,9 @@
             <i class="fa fa-angle-up" v-if="filmIntrStatus" aria-hidden="true"></i>
           </div>
       </div>
-      <div class="filmSimPanle filmactorContainer">
-          <div class="panleHeaderContainer filmactorHeaderContainer">
-              <div class="directorColumn" :style="{marginLeft: directorColumnLeft}" >
+      <div class="filmSimPanle filmActorContainer">
+          <div class="panleHeaderContainer filmActorHeaderContainer">
+              <div class="directorColumn" :style="{marginLeft: directorColumnLeft1}" >
                   <span>导演</span>
               </div>
               <div class="actorColumn">
@@ -90,8 +90,8 @@
                   <span class="more allActor">全部<i class="fa fa-angle-right" aria-hidden="true"></i></span>
               </div>
           </div>
-          <div class="panleBodyContaner filmactorContentContainer">
-              <ul class="actorListGroup" v-scroll="onScroll">
+          <div class="panleBodyContaner filmActorContentContainer">
+              <ul class="actorListGroup" v-scroll="onScroll1">
                 <li class="actorListItem" v-for="item in filmData.actorData.director">
                   <div class="actorImageShowContainer">
                       <img :src="item.avatar.replace(/(\/w.h\/)/igm, '/165.220/')" alt="">
@@ -137,8 +137,93 @@
               </div>
           </div>
       </div>
-      <div class="filmSimPanle">
-          aaaa
+      <div class="filmSimPanle filmMediaContainer">
+          <div class="panleHeaderContainer filmMediaHeaderContainer">
+              <div class="MediaColumn" :style="{marginLeft: directorColumnLeft2}" >
+                  <span>视频</span>
+                  <span class="more allMedia">{{filmData.baseData.vnum}}<i class="fa fa-angle-right" aria-hidden="true"></i></span>
+              </div>
+              <div class="pictureColumn">
+                  <span>照片</span>
+                  <span class="more allPicture">{{filmData.baseData.pn}}
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                  </span>
+              </div>
+          </div>
+          <div class="panleBodyContaner filmMediaContentContainer">
+              <ul class="mediaListGroup" v-scroll="onScroll2">
+                <li class="mediaListItem">
+                  <div class="mediaImageShowContainer">
+                      <img :src="filmData.baseData.videoImg" alt="">
+                  </div>
+                </li>
+                <li class="mediaListItem" v-for="item in filmData.baseData.photos">
+                  <div class="mediaImageShowContainer">
+                      <img :src="item.replace(/(\/w.h\/)/igm, '/165.220/')" alt="">
+                  </div>
+                </li>
+              </ul>
+          </div>
+          <div class="musicContainer" v-if="filmData.baseData.musicName">
+              <div class="musicHeader">
+                 <div class="line"></div>
+              </div>
+              <div class="musicMainContainer">
+                <div class="musicImageContainer">
+                  <div class="">
+                    <img :src="filmData.baseData.img" alt="">
+                  </div>
+                </div>
+                <div class="musicContentContainer">
+                    <div class="musicContent">
+                      <div class="title">
+                        电影原声
+                      </div>
+                      <div class="musicName">
+                        {{ filmData.baseData.musicName}}
+                      </div>
+                    </div>
+                    <div class="moreMusic">
+                        {{ filmData.baseData.musicNum}}
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="filmSimPanle boxOfficePanle" v-if="filmData.boxOfficeData.firstWeekBox > 0">
+        <div class="panleHeaderContainer ">
+          <span>票房</span>
+          <span><i class="fa fa-angle-right fa-lg" aria-hidden="true"></i></span>
+        </div>
+        <div class="panleBodyContaner">
+            <div class="boxOfficeContainer">
+                <div class="simBox">
+                  <span class="num">{{filmData.boxOfficeData.lastDayRank}}</span>
+                  <span class="intr">昨日票房排行</span>
+                </div>
+                <div class="simBox">
+                  <span class="num">{{filmData.boxOfficeData.firstWeekBox}}</span>
+                  <span class="intr">首周票房(万)</span>
+                </div>
+                <div class="simBox">
+                  <span class="num">{{filmData.boxOfficeData.sumBox}}</span>
+                  <span class="intr">累计票房(万)</span>
+                </div>
+            </div>
+            <div class="winningContainer" v-if="filmData.winningData[0]">
+                <span class="simWins" v-for=" item in filmData.winningData">
+                  <img src="static/images/a7b.png" alt="">
+                  <span class=simWin>
+                    {{item.title}}
+                    <br/>
+                    <span class="simWinItem" v-for="win in item.items">
+                      {{win.title}}
+                    </span>
+                  </span>
+                </span>
+            </div>
+        </div>
       </div>
       <div class="filmSimPanle">
           aaaa
@@ -165,6 +250,7 @@
         height: 100%;
         box-sizing: border-box;
         -webkit-overflow-scrolling : touch;
+        padding-bottom: 20vw;
       }
       .goToBuyBtn{
         position: fixed;
@@ -470,7 +556,7 @@
         // height:px2vw(200);
       }
   }
-  .filmactorHeaderContainer{
+  .filmActorHeaderContainer{
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
@@ -492,7 +578,7 @@
         }
     }
   }
-  .filmactorContentContainer{
+  .filmActorContentContainer{
     width: 100%;
     height: px2vw(360);
     overflow-x: auto;
@@ -543,7 +629,6 @@
           }
       }
   }
-
   // 主创说
   .authorWordContainer{
     width: 100%;
@@ -628,8 +713,244 @@
       }
     }
   }
+  // 媒体照片
+  .filmMediaHeaderContainer{
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    align-items: center;
+    padding: 0 px2vw(35);
+    font-size: 13px;
+    .MediaColumn{
+      width: px2vw(380);
+      display: flex;
+      justify-content: space-between;
+      padding-right: 2vw;
+      box-sizing: border-box;
+      .allMedia{
+        color: #ccc;
+        i{
+          margin-left: 4px;
+        }
+      }
+    }
+    .pictureColumn{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+        .allPicture{
+          color: #ccc;
+          i{
+            margin-left: 4px;
+          }
+        }
+    }
+  }
+  .filmMediaContentContainer{
+    width: 100%;
+    height: px2vw(230);
+    overflow-x: auto;
+      .mediaListGroup{
+        display: block;
+        width: auto;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        overflow-y: hidden;
+          .mediaListItem{
+            display: block;
+            float: left;
+            list-style: none;
+            height: 100%;
+            width: px2vw(280);
+            margin: 0 0.8vw;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .mediaImageShowContainer{
+              width: 100%;
+              height: px2vw(200);
+              img{
+                display: block;
+                height: 100%;
+                width: 100%;
+              }
+            }
+          }
+      }
+  }
+  // 电影原声
+  .musicContainer{
+    width: 100%;
+    margin-top: 0vw;
+    .musicHeader{
+      width: 100%;
+      height: px2vw(20);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 1vw;
+       span{
+         font-size: 13px;
+         width: 14vw;
+       }
+       .line{
+         height: 1px;
+         width: 100%;
+         background: #ddd;
+       }
+    }
+    .musicMainContainer{
+      width: 100%;
+      height: 16vw;
+      display: flex;
+      justify-content: space-around;
+      padding:0;
+      align-items: center;
+      .musicImageContainer{
+        width: px2vw(140);
+        height: px2vw(140);
+        position: relative;
+        border:1px solid #ddd;
+        box-sizing: border-box;
+        div{
+          height: 100%;
+          width: 100%;
+          position: relative;
+          z-index: 1;
+          overflow: hidden;
+          background: #fff;
+          img{
+            display: block;
+            height: auto;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+          }
+        }
 
+        &::after{
+          content: '';
+          height: px2vw(110);
+          width: px2vw(110);
+          position: absolute;
+          right: px2vw(-40);
+          top: px2vw(15);
+          background: #363642;
+          border-radius: 50%;
+          z-index: 0;
+        }
+      }
+      .musicContentContainer{
+        width: px2vw(800);
+        height: px2vw(140);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+          .musicContent{
+            height: 80%;
+            width: 80%;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding-left: 2vw;
+            .title{
+                font-size: 14px;
+            }
+            .musicName{
+                color: #ccc;
+                font-size: 13px;
+            }
+          }
+          .moreMusic{
+              color: #ccc;
+              i {
+                color: #ddd;
+              }
+          }
+      }
+    }
+  }
+  // 票房
+  .boxOfficePanle{
+    padding: 0;
+    .panleHeaderContainer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 3vw;
+      box-sizing: border-box;
+      span{
+        font-size: 13px;
+        i{
+          color: #ccc;
+        }
+      }
+    }
+    .panleBodyContaner{
+      min-height: 10vw;
+        .boxOfficeContainer{
+          width: 100%;
+          height: px2vw(200);
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+            .simBox{
+              height: 80%;
+              width: 30%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+                span.num{
+                  color: #D54544;
+                  font-size: 16px;
+                  line-height: 1.5;
+                }
+                span.intr{
+                  color: #CACACA;
+                  font-size: 13px;
+                  line-height: 1.5;
 
+                }
+            }
+        }
+        .winningContainer{
+          border-top: 1px solid #ddd;
+          min-height: px2vw(100);
+          width: 100%;
+            .simWins{
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              min-height: px2vw(100);
+              padding:  2vw 3vw;
+              img{
+                height: px2vw(50);
+                width: auto;
+                margin: 0 1vw 0 0;
+              }
+              span.simWin{
+                color: #686868;
+                font-size: 14px;
+                line-height: 1.4;
+                font-size: 14px;
+                span.simWinItem{
+                  color: #999;
+                  font-size: 13px;
+                }
+              }
+            }
+        }
+    }
+  }
 </style>
 
 <script>
@@ -701,7 +1022,7 @@ var getFilmInfo = (id, that) => {
               'X-Requested-With': 'XMLHttpRequest'
             }
         }).then((response) => {
-          console.log(response.body.data.major)
+          // console.log(response.body.data.major)
           filmDatas.authorWordData = response.body.data.major
         }, (response) => {
           console.log('error')
@@ -727,7 +1048,7 @@ var getFilmInfo = (id, that) => {
               'X-Requested-With': 'XMLHttpRequest'
             }
         }).then((response) => {
-          // console.log(response.body.data)
+          console.log(response.body.data)
           filmDatas.winningData = response.body.data
         }, (response) => {
           console.log('error')
@@ -835,14 +1156,14 @@ window.onscroll = () => {
     let opacity = top / 200
     document.querySelector('.filmInfoTopCtrlContainer').style.background = 'rgba(243,77,65,' + opacity + ')'
     document.querySelector('.filminfotTitleContainer').style.opacity = opacity
-    console.log(opacity)
+    // console.log(opacity)
   } else {
     document.querySelector('.filmInfoTopCtrlContainer').style.background = 'rgba(243,77,65,1)'
     document.querySelector('.filminfotTitleContainer').style.opacity = 1
   }
 }
 
-$('.filmactorContentContainer .actorListGroup').offset()
+$('.filmActorContentContainer .actorListGroup').offset()
 export default {
   name: 'filminfo',
   data () {
@@ -863,7 +1184,8 @@ export default {
         },
         filmIntrStatus: false,
         topCtrlBackground: 'rgba(255,0,0,0)',
-        directorColumnLeft: '0px'
+        directorColumnLeft1: '0px',
+        directorColumnLeft2: '0px'
     }
   },
   components: {
@@ -873,13 +1195,22 @@ export default {
       console.log('111')
       this.filmIntrStatus = !this.filmIntrStatus
     },
-    onScroll (e, position) {
+    onScroll1 (e, position) {
       this.position = position
-      if (position.scrollLeft < 100) {
+      if (position.scrollLeft < 300) {
         // console.log(position.scrollLeft)
-        this.directorColumnLeft = -position.scrollLeft + 'px'
+        this.directorColumnLeft1 = -position.scrollLeft + 'px'
       } else {
-        this.directorColumnLeft = '-100px'
+        this.directorColumnLeft1 = '-300px'
+      }
+    },
+    onScroll2 (e, position) {
+      this.position = position
+      if (position.scrollLeft < 300) {
+        console.log(position.scrollLeft)
+        this.directorColumnLeft2 = -position.scrollLeft + 'px'
+      } else {
+        this.directorColumnLeft2 = '-300px'
       }
     }
   },
