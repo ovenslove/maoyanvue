@@ -252,7 +252,7 @@
         <div class="panleBodyContaner">
           <div class="simReviewContainer" v-for="item in filmData.professionalReviewData.data">
             <div class="userImageContainer">
-              <img :src="item.avatarurl" alt="">
+              <img :src="item.avatarurl" alt="" onerror="this.src='static/images/onerror.png'">
             </div>
             <div class="reviewContentContainer">
               <div class="userInfoContainer">
@@ -285,6 +285,58 @@
             <span>查看全部{{filmData.professionalReviewData.paging.total}}条专业评论></span>
         </div>
       </div>
+      <!-- 短评评论 -->
+      <div class="filmSimPanle  shortReviewPanle">
+        <div class="panleHeaderContainer ">
+          <span>短评</span>
+          <span class="addShortReview">写短评</span>
+        </div>
+        <div class="panleBodyContaner">
+          <div class="simReviewContainer" v-for="( item , key) in filmData.shortReviewData.hcmts" v-if="key < 3">
+            <div class="simReviewContent">
+              <div class="userImageContainer">
+                <span class="level">V{{item.userLevel}}</span>
+                <img :src="item.avatarurl" alt="" onerror="this.src='static/images/onerror.png'">
+              </div>
+              <div class="reviewContentContainer">
+                <div class="userInfoContainer">
+                  <div class="userInfo">
+                    <div class="userName">
+                      {{item.nick}}
+                    </div>
+                    <div class="userScoreStar">
+                      <i class="fa fa-star" aria-hidden="true" v-for=" n in Math.floor(item.score)"></i>
+                      <i class="fa fa-star-half-o" aria-hidden="true" v-if="(item.score*2)%2 ===1 "></i>
+                    </div>
+                  </div>
+                  <div class="Score">
+                      <span class="num"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+                  </div>
+                </div>
+                <div class="reviewContent">
+                  {{item.content}}
+                </div>
+                <div class="reviewBaseInfoContainer">
+                  <span class="time">{{((new Date().getTime() - new Date(item.time)) / 84000) > 3 ? (new Date(item.time).getMonth()+1) + '-' + (new Date(item.time).getDate()+1) : Math.floor(((new Date().getTime() - new Date(item.time)) / 84000)) + '天前'}}</span>
+                  <div class="">
+                    <span class="approve">
+                      <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                      {{item.approve}}
+                    </span>
+                    <span class="reply">
+                      <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                      {{item.reply}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="moreProfessionalReview" v-if="filmData.shortReviewData">
+          <span>查看全部{{filmData.shortReviewData.total}}条短评></span>
+      </div>
+    </div>
       <!-- 短评评论 -->
       <!-- <div class="filmSimPanle ">
         <div class="panleHeaderContainer ">
@@ -1046,6 +1098,7 @@
           padding: 3px 5px;
           border-radius:10px;
           font-size: 12px;
+          color: #F34D41;
         }
     }
     .panleBodyContaner{
@@ -1119,11 +1172,14 @@
             width: px2vw(110);
             height: px2vw(110);
             border-radius: 50%;
-            overflow: hidden;
+            position: relative;
+
             img{
               display: block;
               height: 100%;
               width: 100%;
+              border-radius: 50%;
+              overflow: hidden;
             }
           }
           .reviewContentContainer{
@@ -1196,6 +1252,147 @@
         }
       }
   }
+
+  // 短评论
+  .shortReviewPanle{
+    padding: 0;
+      .panleHeaderContainer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 0 2vw;
+        border-bottom: 1px solid #ddd;
+        span.addShortReview{
+          border:1px solid #F34D41;
+          padding: 3px 5px;
+          border-radius:10px;
+          font-size: 12px;
+          color: #F34D41;
+        }
+      }
+      .panleBodyContaner{
+        width: 100%;
+        min-height: 30vw;
+        .simReviewContainer{
+          width: 100%;
+          height: auto;
+          display: flex;
+          justify-content: space-around;
+          box-sizing: border-box;
+          padding:1vw 2vw;
+          &:not(:last-child) .reviewContentContainer{
+            border-bottom: 1px solid #ddd;
+          }
+          .simReviewContent{
+            display: flex;
+            justify-content: space-around;
+            box-sizing: border-box;
+            .userImageContainer{
+              width: px2vw(110);
+              height: px2vw(110);
+              border-radius: 50%;
+              position: relative;
+              .level{
+                position: absolute;
+                height: 5vw;
+                width: 5vw;
+                background: #FFAE00;
+                right: -1vw;
+                bottom: 0;
+                border-radius: 50%;
+                font-size: 10px;
+                color: #fff;
+                text-align: center;
+                line-height: 5vw;
+              }
+              img{
+                display: block;
+                height: 100%;
+                width: 100%;
+                border-radius: 50%;
+                overflow: hidden;
+              }
+            }
+            .reviewContentContainer{
+              width: 84%;
+              height: auto;
+
+              .userInfoContainer{
+                width: 100%;
+                height: px2vw(150);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-sizing: border-box;
+                padding: 0 2vw;
+                .userInfo{
+                  width: 80%;
+                  .userName{
+                    line-height: 1.5;
+                    font-size: 15px;
+                  }
+                  .userScoreStar{
+                    font-size: 13px;
+                    line-height: 1.5;
+                    color: #999;
+                    text-overflow:ellipsis;
+                    overflow:hidden;
+                    white-space:nowrap;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    i{
+                      color: #FFAE00;
+                      margin-right: 1px;
+                    }
+                  }
+                }
+                .Score{
+                  font-size: 12px;
+                  color: #999;
+                  .num{
+                    font-size: 16px;
+                  }
+                }
+              }
+              .reviewContent{
+                box-sizing: border-box;
+                padding: 0 2vw;
+                font-size: 14px;
+                line-height: 1.3;
+              }
+              .reviewBaseInfoContainer{
+                width: 100%;
+                height: px2vw(110);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-sizing: border-box;
+                padding: 0 2vw;
+                color: #999;
+                font-size: 13px;
+                .time{}
+                .approve{}
+              }
+            }
+          }
+        }
+      }
+      .moreProfessionalReview{
+        height: px2vw(130);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top: 1px solid #ddd;
+        span{
+          font-size: 14px;
+          color: #F34D41;
+        }
+      }
+  }
+
 </style>
 
 <script>
@@ -1293,7 +1490,7 @@ var getFilmInfo = (id, that) => {
               'X-Requested-With': 'XMLHttpRequest'
             }
         }).then((response) => {
-          console.log(response.body.data)
+          // console.log(response.body.data)
           filmDatas.winningData = response.body.data
         }, (response) => {
           console.log('error')
@@ -1306,7 +1503,7 @@ var getFilmInfo = (id, that) => {
               'X-Requested-With': 'XMLHttpRequest'
             }
         }).then((response) => {
-          // console.log(response.body.data)
+          // console.log('111' + response.body.data)
           filmDatas.datumData = response.body.data
         }, (response) => {
           console.log('error')
@@ -1320,7 +1517,10 @@ var getFilmInfo = (id, that) => {
             }
         }).then((response) => {
           console.log(response.body)
-          filmDatas.professionalReviewData = response.body
+          filmDatas.professionalReviewData = {
+            data: response.body.data.length ? response.body.data : false,
+            paging: response.body.paging
+          }
         }, (response) => {
           console.log('error')
         })
@@ -1332,7 +1532,7 @@ var getFilmInfo = (id, that) => {
               'X-Requested-With': 'XMLHttpRequest'
             }
         }).then((response) => {
-          // console.log(response.body)
+          console.log(response.body)
           filmDatas.shortReviewData = response.body
         }, (response) => {
           console.log('error')
